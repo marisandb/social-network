@@ -100,7 +100,7 @@ const thoughtController = {
     },
 
   // remove thought
-    removethought({ params }, res) {
+    removeThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })
         .then(deletedThought => {
             if (!deletedThought) {
