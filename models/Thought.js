@@ -32,7 +32,7 @@ const ReactionSchema = new Schema(
 
 
 const ThoughtSchema = new Schema({
-    thoughtText: {
+    thoughts: {
         type: String,
         required: true,
         minLength: 1,
@@ -48,7 +48,7 @@ const ThoughtSchema = new Schema({
         type: String,
         required: true,
     },
-    reactions:  [RectionSchema],
+    reactions:  [ReactionSchema],
 },
     {
         toJSON: {
@@ -65,6 +65,6 @@ ThoughtSchema.virtual('reactionCount').get(function() {
      });
     
 
-const Thought = model('Thought', UserSchema);
+const Thought = model('Thought', ThoughtSchema);
 
 module.exports = Thought;
