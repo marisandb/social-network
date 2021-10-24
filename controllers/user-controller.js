@@ -44,6 +44,7 @@ const userController = {
 
     // createUser
     createUser({ body }, res) {
+      console.log(body)
         User.create(body)
         .then(dbUserData => res.json(dbUserData))
         .catch(err => res.status(400).json(err));
@@ -69,6 +70,31 @@ const userController = {
         .catch(err => res.json(err));
     },
 
+    addFriend({ params }, res) {
+      console.log(`params:`, params)
+      User.findOneAndUpdate(
+        { _id: params.sourceId },
+        { $push: { friends: params.targetId } },
+        { new: true }
+      )
+        .then((sourceUser) => {
+          console.log(`sourceUser ID:`, sourceUser._id);
+          console.log(`params.sourceId:`, params.sourceId);
+          return User.findOneAndUpdate(
+            { _id: params.targetId },
+            { $push: { friends: params.sourceId } },
+            { new: true }
+          );
+        })
+        .then((dbUserData) => {
+          if (!dbUserData) {
+            res.status(404).json({ message: "No user found with this id!" });
+            return;
+          }
+          res.json(dbUserData);
+        })
+        .catch((err) => res.json(err));
+    },
 
     removeFriend({ params }, res) {
         User.findOneAndUpdate(      
